@@ -1,0 +1,39 @@
+Geometry = GenFormat {
+  <<< "geom.gen"
+}
+
+Driver = SecondDerivatives {
+    Delta = 1E-5
+}
+
+Hamiltonian = DFTB {
+  Scc = Yes
+  SlaterKosterFiles {
+    C-C = "../../Slater-Koster/3ob-3-1/C-C.skf"
+  }
+  MaxAngularMomentum {
+    C = "p"
+  }
+  ThirdOrderFull = Yes
+  MaxSCCIterations = 10000
+  HubbardDerivs { # gauss2011, DFTB3 calc
+    C = -0.1492
+  }
+  Filling = Fermi {
+    Temperature[kelvin] = 100.0000000000000000
+  }
+  SCCTolerance = 1.0000000000000001E-007
+  Dispersion = TS {
+  RangeSeparation = 0.94
+  }
+}
+
+Options {}
+
+Analysis {
+  CalculateForces = Yes
+}
+
+ParserOptions {
+  ParserVersion = 7
+}
