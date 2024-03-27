@@ -1,0 +1,50 @@
+Geometry = GenFormat {
+  <<< "geom.gen"
+}
+
+Driver = VelocityVerlet{
+  TimeStep [fs] = 1.0
+  Thermostat = NoseHoover {
+    Temperature [Kelvin] = 100
+    CouplingStrength [cm^-1] = 3200
+  }
+  Steps = 200
+  MovedAtoms = 1:-1
+  MDRestartFrequency = 1
+  KeepStationary = No
+}
+
+Hamiltonian = DFTB {
+  Scc = Yes
+
+  SlaterKosterFiles {
+    C-C = "../../Slater-Koster/3ob-3-1/C-C.skf"
+  }
+  MaxAngularMomentum {
+    C = "p"
+  }
+  ThirdOrderFull = Yes
+  MaxSCCIterations = 10000
+  HubbardDerivs { # gauss2011, DFTB3 calc
+    C = -0.1492
+  }
+  Filling = Fermi {
+    Temperature[kelvin] = 200.0000000000000000
+  }
+  SCCTolerance = 1.0000000000000001E-007
+
+}
+
+Options {
+  WriteResultsTag = No
+  WriteDetailedOut = No
+}
+
+Analysis {
+  CalculateForces = Yes
+
+}
+
+ParserOptions {
+  ParserVersion = 7
+}
