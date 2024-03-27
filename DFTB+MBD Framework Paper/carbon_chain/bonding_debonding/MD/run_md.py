@@ -7,7 +7,7 @@ from filetypes import SaveGeometry, Loadxyz_raw, Loadgen
 from mdhandler import MDHandler
 ang = 1/0.529177249
 
-vdW = 'MBD'
+vdW = 'TS'  # 'MBD' or 'TS'
 temp = 300
 dist = 5
 seed = 10
