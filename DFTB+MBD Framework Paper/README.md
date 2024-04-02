@@ -5,7 +5,7 @@ This folder was buit to support the following paper
 @article{DFTB+MBD,
 title = {Quantum-informed simulations for mechanics of materials: DFTB+MBD framework},
 journal = {TBD},
-author = {Z. Shen and R.I. Sosa and S.P.A. Bordas and A. Tktchenko and J. Lengiewicz.},
+author = {Z. Shen and R.I. Sosa and S.P.A. Bordas and A. Tkatchenko and J. Lengiewicz},
 }
 ```
 The folder includes examples of three different molecular systems, namely carbon chains, carbon nanotubes, and Ultra High Molecular Weight Polyethylene (UHMWPE), which correponds to Section 4 in the paper.
