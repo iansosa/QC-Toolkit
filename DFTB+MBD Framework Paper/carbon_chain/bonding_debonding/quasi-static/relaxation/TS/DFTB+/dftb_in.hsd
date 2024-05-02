@@ -1,0 +1,59 @@
+Geometry = GenFormat {
+  <<< "geom.gen"
+}
+
+Driver = LBFGS{	
+  MovedAtoms = 1:-1
+  MaxForceComponent = 1E-6
+  MaxSteps = 2000
+  Constraints = {
+57 1.0 0.0 0.0
+57 0.0 1.0 0.0
+57 0.0 0.0 1.0
+58 1.0 0.0 0.0
+58 0.0 1.0 0.0
+58 0.0 0.0 1.0
+59 1.0 0.0 0.0
+59 0.0 1.0 0.0
+59 0.0 0.0 1.0
+60 1.0 0.0 0.0
+60 0.0 1.0 0.0
+60 0.0 0.0 1.0}
+}
+Hamiltonian = DFTB {
+  Scc = Yes
+  ReadInitialCharges = No
+  SlaterKosterFiles {
+    H-C = "../../Slater-Koster/3ob-3-1/H-C.skf"
+    C-H = "../../Slater-Koster/3ob-3-1/C-H.skf"
+    H-H = "../../Slater-Koster/3ob-3-1/H-H.skf"
+    C-C = "../../Slater-Koster/3ob-3-1/C-C.skf"
+  }
+  MaxAngularMomentum {
+    H = "p"
+    C = "p"
+  }
+  ThirdOrderFull = Yes
+  MaxSCCIterations = 10000
+  HubbardDerivs { # gauss2011, DFTB3 calc
+    H = -0.1857
+    C = -0.1492
+  }
+  Filling = Fermi {
+    Temperature[kelvin] = 200.0000000000000000
+  }
+  SCCTolerance = 1.0000000000000001E-007
+  Dispersion = TS {
+  RangeSeparation = 0.94
+  }
+}
+
+Options {}
+
+Analysis {
+  CalculateForces = Yes
+}
+
+ParserOptions {
+  ParserVersion = 7
+}

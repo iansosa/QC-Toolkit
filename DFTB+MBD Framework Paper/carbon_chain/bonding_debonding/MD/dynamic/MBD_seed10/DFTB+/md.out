@@ -1,0 +1,84 @@
+MD step: 0
+ Nose-Hoover chain variables
+ x:
+    0.1000000000E+01    0.1000000000E+01    0.1000000000E+01
+ v:
+    0.0000000000E+00    0.0000000000E+00    0.0000000000E+00
+ g:
+    0.0000000000E+00    0.0000000000E+00    0.0000000000E+00
+Potential Energy:                  -95.6874651512 H        -2603.7884 eV
+MD Kinetic Energy:                   0.0798037467 H            2.1716 eV
+Total MD Energy:                   -95.6076614045 H        -2601.6168 eV
+MD Temperature:                      0.0009500446 au         300.0000 K
+Dipole moment:    0.00000001    0.00000000   -0.00000000 au
+Dipole moment:    0.00000001    0.00000000   -0.00000000 Debye
+MD step: 1
+ Nose-Hoover chain variables
+ x:
+    0.1000000041E+01    0.1000403575E+01    0.1000402856E+01
+ v:
+    0.3974519236E-08   -0.3613708463E-04   -0.3615764431E-04
+ g:
+    0.1919853234E-09   -0.5384825398E-05   -0.5383519511E-05
+Potential Energy:                  -95.6848873309 H        -2603.7183 eV
+MD Kinetic Energy:                   0.0773163288 H            2.1039 eV
+Total MD Energy:                   -95.6075710021 H        -2601.6144 eV
+MD Temperature:                      0.0009204325 au         290.6492 K
+Dipole moment:    0.02577599    0.00150476    0.00543951 au
+Dipole moment:    0.06551604    0.00382473    0.01382586 Debye
+MD step: 2
+ Nose-Hoover chain variables
+ x:
+    0.9999310463E+00    0.9985051636E+00    0.9985063400E+00
+ v:
+   -0.6680590712E-05   -0.1475888057E-03   -0.1472697946E-03
+ g:
+   -0.3225499315E-06   -0.5377327511E-05   -0.5363042945E-05
+Potential Energy:                  -95.6785672999 H        -2603.5463 eV
+MD Kinetic Energy:                   0.0712237573 H            1.9381 eV
+Total MD Energy:                   -95.6073435426 H        -2601.6082 eV
+MD Temperature:                      0.0008479019 au         267.7459 K
+Dipole moment:    0.04939660    0.00300340    0.01098025 au
+Dipole moment:    0.12555364    0.00763389    0.02790900 Debye
+MD step: 3
+ Nose-Hoover chain variables
+ x:
+    0.9996232242E+00    0.9943024214E+00    0.9943191819E+00
+ v:
+   -0.2311028372E-04   -0.2589201957E-03   -0.2577012655E-03
+ g:
+   -0.7899781976E-06   -0.5295099084E-05   -0.5317785733E-05
+Potential Energy:                  -95.6718945683 H        -2603.3647 eV
+MD Kinetic Energy:                   0.0647956457 H            1.7632 eV
+Total MD Energy:                   -95.6070989226 H        -2601.6015 eV
+MD Temperature:                      0.0007713767 au         243.5812 K
+Dipole moment:    0.06846301    0.00447819    0.01657984 au
+Dipole moment:    0.17401563    0.01138242    0.04214175 Debye
+MD step: 4
+ Nose-Hoover chain variables
+ x:
+    0.9988950682E+00    0.9878173153E+00    0.9878606228E+00
+ v:
+   -0.4736051335E-04   -0.3677938095E-03   -0.3669527859E-03
+ g:
+   -0.1158473508E-05   -0.5007998338E-05   -0.5249553114E-05
+Potential Energy:                  -95.6680740790 H        -2603.2607 eV
+MD Kinetic Energy:                   0.0611257297 H            1.6633 eV
+Total MD Energy:                   -95.6069483493 H        -2601.5974 eV
+MD Temperature:                      0.0007276873 au         229.7852 K
+Dipole moment:    0.08071614    0.00591199    0.02217277 au
+Dipole moment:    0.20515998    0.01502677    0.05635757 Debye
+MD step: 5
+ Nose-Hoover chain variables
+ x:
+    0.9976379345E+00    0.9791448885E+00    0.9791596200E+00
+ v:
+   -0.7429762814E-04   -0.4697150252E-03   -0.4746027090E-03
+ g:
+   -0.1271868024E-05   -0.4457442292E-05   -0.5164193195E-05
+Potential Energy:                  -95.6681525213 H        -2603.2629 eV
+MD Kinetic Energy:                   0.0612441733 H            1.6665 eV
+Total MD Energy:                   -95.6069083479 H        -2601.5963 eV
+MD Temperature:                      0.0007290973 au         230.2304 K
+Dipole moment:    0.08448310    0.00729085    0.02768152 au
+Dipole moment:    0.21473464    0.01853150    0.07035940 Debye
