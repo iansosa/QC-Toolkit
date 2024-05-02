@@ -1,6 +1,9 @@
 import numpy as np
 from numpy import random
 from geohandler import Handler
+from heapq import nsmallest
+from operator import itemgetter
+import time
 
 class Sphere(Handler):
 
@@ -71,7 +74,7 @@ class Custom(Handler): #creates a custom carbon structure given the atomic posit
             self.x.append(pos[i][0])
             self.y.append(pos[i][1])
             self.z.append(pos[i][2])
-
+        self.pos_as_nparray = np.array(self.PosAsList())
         super().__init__(self.Nat,R0,propcalc)
         if types == None:
             self.types = []
@@ -96,6 +99,20 @@ class FromFile(Handler): #loads a structure from file
             self.types = []
             for i in range(self.Nat):
                 self.types.append('C')
+        self.pos_as_nparray = np.array(self.PosAsList())
+
+    def ReadyPolyethylene(self,idx,Nneighbours=1000):
+        a = self.Distances(idx)
+
+        # idx_aux, _ = zip(*nsmallest(Nneighbours, enumerate(a), key=itemgetter(1)))
+
+        sorted_indices = np.argsort(a)
+        idx_aux = sorted_indices[:Nneighbours]
+
+        end_time = time.time()
+        ret = Custom(self.PosAsListIdx(idx_aux),types=self.TypesAsListIdx(idx_aux))
+
+        return ret
 
     def SetPos(self,Nat,R0):
         self.Nat = Nat

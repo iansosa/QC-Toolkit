@@ -178,6 +178,7 @@ class Handler():
                         self.Nat = self.Nat + 1
 
         print("structure expanded "+str(self.Nat/Nat_init)+" times..")
+        self.pos_as_nparray = np.array(self.PosAsList())
 
     def RemoveAtoms(self,idx): #removes all atoms in the list idx from the geometry
         for index in sorted(idx, reverse=True):
@@ -256,16 +257,16 @@ class Handler():
 
     def SaveR0s(self): #Saves R0s to file
         print("Saving R0s..")
-        with open('out/R0s.txt', 'w') as f:
+        with open('../out/R0s.txt', 'w') as f:
             for i in range(len(self.R0s)):
                 f.write(str(i)+' '+str(self.R0s[i])+'\n')
 
     def Distances(self,idx): #returns a list of all the interatomic distances from atom idx
-        dist = []
-        for i in range(self.Nat):
-            dist.append(np.sqrt((self.x[idx]-self.x[i])**2+(self.y[idx]-self.y[i])**2+(self.z[idx]-self.z[i])**2))
-
-        return dist
+        ref_point = np.array(self.pos_as_nparray[idx])
+        diff = (self.pos_as_nparray - ref_point)**2
+        # print("hi",np.sqrt(np.sum(diff,axis=1))[0],np.sqrt((self.x[idx]-self.x[0])**2+(self.y[idx]-self.y[0])**2+(self.z[idx]-self.z[0])**2))
+        distances = np.sqrt(np.sum(diff,axis=1))
+        return np.array(distances)
 
     def Distance(self,i,j): #returns the distance between atom i and j
         return np.sqrt((self.x[i]-self.x[j])**2+(self.y[i]-self.y[j])**2+(self.z[i]-self.z[j])**2)
@@ -282,7 +283,7 @@ class Handler():
             dist.append(distances)
 
         print("Saving distances..")
-        with open('out/Distances.txt', 'w') as f:
+        with open('../out/Distances.txt', 'w') as f:
             for i in range(self.Nat):
                 f.write(str(i)+' ')
                 for k in range(self.Nat):
@@ -316,10 +317,10 @@ class Handler():
     def SaveGeometry(self,decour="geom",path=None,instruct=False,charges=None,decour_charges="charges"): #saves the geometry to a gen file in angstroms
         print("Saving geometry..")
         angstrom = 0.529177249
-        folder = "DFTB+"
+        folder = "../DFTB+"
         multiatom = False
         if instruct == True:
-            folder = "SavedStructures"
+            folder = "../SavedStructures"
         if self.periodic == False:
             name=folder+'/'+decour+'.gen'
             if path != None:
@@ -368,7 +369,7 @@ class Handler():
             totalcharge = 0
             for i in range(self.Nat):
                 totalcharge=totalcharge+charges[i][6]
-            with open("DFTB+/charges.dat", 'w') as f:
+            with open("../DFTB+/charges.dat", 'w') as f:
                 f.write("           6\n")
                 f.write(" F F F T          "+str(self.Nat)+"           1   "+str(totalcharge)+"\n")
                 for i in range(self.Nat):
@@ -396,38 +397,38 @@ class Handler():
             recognized = True
             if path=="Graphene-C92.sdf":
                 angstrom = angstrom * 0.71121438
-            self.Nat, geometry = filetypes.Loadsdf("SavedStructures/"+path,angstrom)
+            self.Nat, geometry = filetypes.Loadsdf("../SavedStructures/"+path,angstrom)
             print(str(self.Nat)+" atoms loaded")
                 
         if extension == "gen":
             recognized = True
             if path != "geom.out.gen" and path != "geo_end.gen":
-                self.Nat, geometry, self.periodic, self.types, self.unit_cell = filetypes.Loadgen("SavedStructures/"+path,angstrom)
+                self.Nat, geometry, self.periodic, self.types, self.unit_cell = filetypes.Loadgen("../SavedStructures/"+path,angstrom)
                 print(str(self.Nat)+" atoms loaded")
             else:
-                self.Nat, geometry, self.periodic, self.types, self.unit_cell = filetypes.Loadgen("DFTB+/"+path,angstrom)
+                self.Nat, geometry, self.periodic, self.types, self.unit_cell = filetypes.Loadgen("../DFTB+/"+path,angstrom)
 
         if extension == "gro":
             recognized = True
-            self.Nat, geometry, self.periodic, self.types, self.unit_cell = filetypes.Loadgro("SavedStructures/"+path,nantobohr)
+            self.Nat, geometry, self.periodic, self.types, self.unit_cell = filetypes.Loadgro("../SavedStructures/"+path,nantobohr)
             print(str(self.Nat)+" atoms loaded")
 
         if extension == "xyz":
             recognized = True
-            self.Nat, geometry = filetypes.Loadxyz_single("SavedStructures/"+path,angstrom)
+            self.Nat, geometry = filetypes.Loadxyz_single("../SavedStructures/"+path,angstrom)
 
         if extension == "cc1":
             recognized = True
-            self.Nat, geometry, self.types = filetypes.Loadcc1("SavedStructures/"+path,angstrom)
+            self.Nat, geometry, self.types = filetypes.Loadcc1("../SavedStructures/"+path,angstrom)
 
         if extension == "txt":
             recognized = True
-            self.Nat, geometry = filetypes.Loadtxt("SavedStructures/"+path,angstrom)
+            self.Nat, geometry = filetypes.Loadtxt("../SavedStructures/"+path,angstrom)
             print(str(self.Nat)+" atoms loaded")
 
         if extension == "ply":
             recognized = True
-            self.Nat, geometry = filetypes.LoadPly("SavedStructures/"+path,10)
+            self.Nat, geometry = filetypes.LoadPly("../SavedStructures/"+path,10)
             print(str(self.Nat)+" atoms loaded")
 
         if recognized == False:
@@ -443,47 +444,38 @@ class Handler():
         self.y = geometry[1]
         self.z = geometry[2]
 
-        if self.Nat < 2000:
-            self.R0s, self.widths = self.GetR0s(self.R0neighbours)
-            self.R0 = np.mean(self.R0s)
-            self.CalcBondedNeighbours(self.R0*1.5)
-            self.CalcBondDistances()
-            self.CalcBondAngles()
-            self.CalcBondOffPlane()
-            self.CalcBondDihedral()
-
     def RunOptimize(self,vdw=None,static=None,read_charges=False,packing=[5,5,5],mbdpacking=[3,3,3], fixlengths=False): #Runs a DFTB+ optimization
         if self.periodic == False:
             if vdw == None:
-                shutil.copyfile('DFTB+/in_files/optimize.hsd', 'DFTB+/dftb_in.hsd')
+                shutil.copyfile('../DFTB+/in_files/optimize.hsd', '../DFTB+/dftb_in.hsd')
             elif vdw == "MBD":
-                shutil.copyfile('DFTB+/in_files/optimize_mbd.hsd', 'DFTB+/dftb_in.hsd')
+                shutil.copyfile('../DFTB+/in_files/optimize_mbd.hsd', '../DFTB+/dftb_in.hsd')
             elif vdw == "PW":
-                shutil.copyfile('DFTB+/in_files/optimize_pw.hsd', 'DFTB+/dftb_in.hsd')
+                shutil.copyfile('../DFTB+/in_files/optimize_pw.hsd', '../DFTB+/dftb_in.hsd')
             elif vdw == "TS":
-                shutil.copyfile('DFTB+/in_files/optimize_ts.hsd', 'DFTB+/dftb_in.hsd')
+                shutil.copyfile('../DFTB+/in_files/optimize_ts.hsd', '../DFTB+/dftb_in.hsd')
             else:
                 print ("Dispersion type not recognized")
                 sys.exit()
             try:
-                file = open("DFTB+/dftb_in.hsd", "r+")
+                file = open("../DFTB+/dftb_in.hsd", "r+")
             except OSError:
                 print ("Could not open dftb_in.hsd file")
                 sys.exit()
         else:
             if vdw == None:
-                shutil.copyfile('DFTB+/in_files/optimize-periodic.hsd', 'DFTB+/dftb_in.hsd')
+                shutil.copyfile('../DFTB+/in_files/optimize-periodic.hsd', '../DFTB+/dftb_in.hsd')
             elif vdw == "MBD":
-                shutil.copyfile('DFTB+/in_files/optimize-periodic_mbd.hsd', 'DFTB+/dftb_in.hsd')
+                shutil.copyfile('../DFTB+/in_files/optimize-periodic_mbd.hsd', '../DFTB+/dftb_in.hsd')
             elif vdw == "PW":
-                shutil.copyfile('DFTB+/in_files/optimize-periodic_pw.hsd', 'DFTB+/dftb_in.hsd')
+                shutil.copyfile('../DFTB+/in_files/optimize-periodic_pw.hsd', '../DFTB+/dftb_in.hsd')
             elif vdw == "TS":
-                shutil.copyfile('DFTB+/in_files/optimize-periodic_ts.hsd', 'DFTB+/dftb_in.hsd')
+                shutil.copyfile('../DFTB+/in_files/optimize-periodic_ts.hsd', '../DFTB+/dftb_in.hsd')
             else:
                 print ("Dispersion type not recognized")
                 sys.exit()
             try:
-                file = open("DFTB+/dftb_in.hsd", "r+")
+                file = open("../DFTB+/dftb_in.hsd", "r+")
             except OSError:
                 print ("Could not open dftb_in.hsd file")
                 sys.exit()
@@ -602,40 +594,40 @@ class Handler():
                 if lines[i].find("MaxAngularMomentum") != -1:
                     lines[i+1] = '    Si = "p"\n'
 
-        with open('DFTB+/dftb_in.hsd', 'w') as f:
+        with open('../DFTB+/dftb_in.hsd', 'w') as f:
             for i in range(len(lines)):
                 f.write(lines[i])
-
-        subprocess.run("./dftbOpt.sh", shell=True)
+        print("asd")
+        subprocess.run("./../src/dftbOpt.sh", shell=True)
 
     def RunStatic(self,vdw=None,read_charges=False,packing=[5,5,5],mbdpacking=[2,2,2],get_CPA=False):
         if self.periodic == False:
             if vdw == None:
-                shutil.copyfile('DFTB+/in_files/static_calc.hsd', 'DFTB+/dftb_in.hsd')
+                shutil.copyfile('../DFTB+/in_files/static_calc.hsd', '../DFTB+/dftb_in.hsd')
             elif vdw == "MBD":
-                shutil.copyfile('DFTB+/in_files/static_calc_mbd.hsd', 'DFTB+/dftb_in.hsd')
+                shutil.copyfile('../DFTB+/in_files/static_calc_mbd.hsd', '../DFTB+/dftb_in.hsd')
             elif vdw == "PW":
-                shutil.copyfile('DFTB+/in_files/static_calc_pw.hsd', 'DFTB+/dftb_in.hsd')
+                shutil.copyfile('../DFTB+/in_files/static_calc_pw.hsd', '../DFTB+/dftb_in.hsd')
             elif vdw == "TS":
-                shutil.copyfile('DFTB+/in_files/static_calc_ts.hsd', 'DFTB+/dftb_in.hsd')
+                shutil.copyfile('../DFTB+/in_files/static_calc_ts.hsd', '../DFTB+/dftb_in.hsd')
             else:
                 print ("Dispersion type not recognized")
                 sys.exit()
         else:
             if vdw == None:
-                shutil.copyfile('DFTB+/in_files/static_calc-periodic.hsd', 'DFTB+/dftb_in.hsd')
+                shutil.copyfile('../DFTB+/in_files/static_calc-periodic.hsd', '../DFTB+/dftb_in.hsd')
             elif vdw == "MBD":
-                shutil.copyfile('DFTB+/in_files/static_calc-periodic_mbd.hsd', 'DFTB+/dftb_in.hsd')
+                shutil.copyfile('../DFTB+/in_files/static_calc-periodic_mbd.hsd', '../DFTB+/dftb_in.hsd')
             elif vdw == "PW":
-                shutil.copyfile('DFTB+/in_files/static_calc-periodic_pw.hsd', 'DFTB+/dftb_in.hsd')
+                shutil.copyfile('../DFTB+/in_files/static_calc-periodic_pw.hsd', '../DFTB+/dftb_in.hsd')
             elif vdw == "TS":
-                shutil.copyfile('DFTB+/in_files/static_calc-periodic_ts.hsd', 'DFTB+/dftb_in.hsd')
+                shutil.copyfile('../DFTB+/in_files/static_calc-periodic_ts.hsd', '../DFTB+/dftb_in.hsd')
             else:
                 print ("Dispersion type not recognized")
                 sys.exit()
 
         try:
-            file = open("DFTB+/dftb_in.hsd", "r+")
+            file = open("../DFTB+/dftb_in.hsd", "r+")
         except OSError:
             print ("Could not open dftb_in.hsd file")
             sys.exit()
@@ -738,26 +730,26 @@ class Handler():
                 if lines[i].find("Options {") != -1:
                     lines.insert(i+1,'  WriteCPA = Yes  \n')
                 
-        with open('DFTB+/dftb_in.hsd', 'w') as f:
+        with open('../DFTB+/dftb_in.hsd', 'w') as f:
             for i in range(len(lines)):
                 f.write(lines[i])
 
 
-        subprocess.run("./dftbOpt.sh", shell=True)
+        subprocess.run("./../src/dftbOpt.sh", shell=True)
 
     def RunHessian(self,vdw=None):
         if vdw == None:
-            shutil.copyfile('DFTB+/in_files/Hessian_calc.hsd', 'DFTB+/dftb_in.hsd')
+            shutil.copyfile('../DFTB+/in_files/Hessian_calc.hsd', '../DFTB+/dftb_in.hsd')
         elif vdw == "MBD":
-            shutil.copyfile('DFTB+/in_files/Hessian_calc_mbd.hsd', 'DFTB+/dftb_in.hsd')
+            shutil.copyfile('../DFTB+/in_files/Hessian_calc_mbd.hsd', '../DFTB+/dftb_in.hsd')
         elif vdw == "PW":
-            shutil.copyfile('DFTB+/in_files/Hessian_calc_pw.hsd', 'DFTB+/dftb_in.hsd')
+            shutil.copyfile('../DFTB+/in_files/Hessian_calc_pw.hsd', '../DFTB+/dftb_in.hsd')
         elif vdw == "TS":
-            shutil.copyfile('DFTB+/in_files/Hessian_calc_ts.hsd', 'DFTB+/dftb_in.hsd')
+            shutil.copyfile('../DFTB+/in_files/Hessian_calc_ts.hsd', '../DFTB+/dftb_in.hsd')
         else:
             print ("Dispersion type not recognized")
             sys.exit()
-        subprocess.run("./dftbOpt.sh", shell=True)
+        subprocess.run("./../src/dftbOpt.sh", shell=True)
 
     def Displace(self,i,dv): #displaces atom i a dv vector distance (Bohr)
         self.x[i]=self.x[i]+dv[0]
@@ -870,7 +862,7 @@ class Handler():
 
     def GetForces(self): #load all of the total forces from DFTB
         try:
-            file = open("DFTB+/detailed.out", "r+")
+            file = open("../DFTB+/detailed.out", "r+")
         except OSError:
             print ("Could not open detailed.out file")
             sys.exit()
@@ -892,7 +884,7 @@ class Handler():
 
     def GetVolume(self,idx): #loads the CPA ratio from atom idx
         try:
-            file = open("DFTB+/CPA_ratios.out", "r+")
+            file = open("../DFTB+/CPA_ratios.out", "r+")
         except OSError:
             print ("Could not CPA_ratios file")
             sys.exit()
@@ -905,7 +897,7 @@ class Handler():
 
     def GetStress(self): #load all of the total forces from DFTB
         try:
-            file = open("DFTB+/detailed.out", "r+")
+            file = open("../DFTB+/detailed.out", "r+")
         except OSError:
             print ("Could not open detailed.out file")
             sys.exit()
@@ -927,7 +919,7 @@ class Handler():
 
     def GetHessian(self,condensed=False): #load the hessian matrix from dftb
         try:
-            file = open("DFTB+/hessian.out", "r+")
+            file = open("../DFTB+/hessian.out", "r+")
         except OSError:
             print ("Could not open detailed.out file")
             sys.exit()
@@ -967,7 +959,7 @@ class Handler():
 
     def GetEnergy(self): #load the total energy from DFTB
         try:
-            file = open("DFTB+/detailed.out", "r+")
+            file = open("../DFTB+/detailed.out", "r+")
         except OSError:
             print ("Could not open detailed.out file")
             sys.exit()

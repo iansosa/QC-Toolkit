@@ -68,6 +68,39 @@ def min_delta(d,FMBD,fPW,r):
         ret = 100000
     return ret*100
 
+def min_delta_vector(d,FMBD,fPW,r,density_versor):
+    FPW = np.array([0,0,0])
+    for i in range(len(fPW)):
+        corr=(r[i]/d[1])**(d[0]+d[2]*d[1]/r[i])
+        if r[i] < 1:
+            corr = 1
+        FPW = FPW + fPW[i]*corr
+    PW_versor = FPW/LA.norm(FPW)
+    new_PW_versor = (1-np.abs(d[3]))*PW_versor+d[3]*density_versor
+    new_PW_versor = new_PW_versor/LA.norm(new_PW_versor)
+    FPW = LA.norm(FPW)*new_PW_versor
+    ret = LA.norm(FMBD-FPW)/LA.norm(FMBD)
+    if ret > 100000 or np.isnan(ret) == True:
+        ret = 100000
+    return ret*100
+
+def min_delta_gauss_vector(d,FMBD,fPW,r,density_versor):
+    FPW = np.array([0,0,0])
+    for i in range(len(fPW)):
+        corr=(1-np.exp(-(r[i]/d[2])**2))*(r[i]/d[1])**d[0]
+        if r[i] < 1:
+            corr = 1
+        FPW = FPW + fPW[i]*corr
+    PW_versor = FPW/LA.norm(FPW)
+    new_PW_versor = (1-np.abs(d[3]))*PW_versor+d[3]*density_versor
+    new_PW_versor = new_PW_versor/LA.norm(new_PW_versor)
+    FPW = LA.norm(FPW)*new_PW_versor
+    ret = LA.norm(FMBD-FPW)/LA.norm(FMBD)
+    if ret > 100000 or np.isnan(ret) == True:
+        ret = 100000
+    return ret*100
+
+
 def min_delta_force(d,FMBD,fPW,r):
     FPW = np.array([0,0,0])
     for i in range(len(fPW)):
@@ -77,6 +110,11 @@ def min_delta_force(d,FMBD,fPW,r):
         FPW = FPW + fPW[i]*corr
     return FPW
 
-def min_delta_salted(d,FMBD,fPW,r):
-    return min_delta(d,FMBD,fPW,r) + 1*(d[0]-1.5)*(d[0]-1.5) + 0.2*(d[0]+d[2])*(d[0]+d[2])
+def min_delta_salted(d,FMBD,fPW,r,e,w):
+    return min_delta(d,FMBD,fPW,r) + w[0]*(d[0]-e[0])*(d[0]-e[0]) + w[1]*(d[1]-d[2])*(d[1]-d[2])
 
+def min_delta_vector_salted(d,FMBD,fPW,r,density_versor,e,w):
+    return min_delta_vector(d,FMBD,fPW,r,density_versor) + w[0]*(d[0]-e[0])*(d[0]-e[0]) + w[1]*(d[1]*d[2]/d[0])*(d[1]*d[2]/d[0]) + w[2]*(d[3])*(d[3])
+
+def min_delta_gauss_vector_salted(d,FMBD,fPW,r,density_versor,e,w):
+    return min_delta_gauss_vector(d,FMBD,fPW,r,density_versor) + w[0]*(d[0]-e[0])*(d[0]-e[0]) + w[1]*(d[2])*(d[2]) + w[2]*(d[3])*(d[3])

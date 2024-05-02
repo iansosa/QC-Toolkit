@@ -161,8 +161,8 @@ class vdWclass:
         volumes = []
         for i in range(len(atom_types)):
             if atom_types[i] == "C":
-                # volumes.append(0.7904) #polymer melts
-                volumes.append(0.87)
+                volumes.append(0.7904) #polymer melts
+                # volumes.append(0.87)
             if atom_types[i] == "H":
                 volumes.append(0.6167)
         # self.a0, self.C6, self.Rvdw = from_volumes(atom_types, 0.87)
