@@ -6,6 +6,11 @@ import filetypes
 import sys
 import structures
 
+
+from pathlib import Path
+current_file_path = Path(__file__).resolve()
+current_dir = str(current_file_path.parent.parent)
+
 class Handler():
 
     def __init__(self,structure,optimize=True):
@@ -24,18 +29,18 @@ class Handler():
 
     def RunMD(self,steps,temp=400,vdw=None,keepstationary=False,static=None,save_steps=1):
         if vdw == None:
-            shutil.copyfile('DFTB+/in_files/md.hsd', 'DFTB+/dftb_in.hsd')
+            shutil.copyfile(current_dir+'/DFTB+/in_files/md.hsd', current_dir+'/DFTB+/dftb_in.hsd')
         elif vdw == "MBD":
-            shutil.copyfile('DFTB+/in_files/md_mbd.hsd', 'DFTB+/dftb_in.hsd')
+            shutil.copyfile(current_dir+'/DFTB+/in_files/md_mbd.hsd', current_dir+'/DFTB+/dftb_in.hsd')
         elif vdw == "PW":
-            shutil.copyfile('DFTB+/in_files/md_pw.hsd', 'DFTB+/dftb_in.hsd')
+            shutil.copyfile(current_dir+'/DFTB+/in_files/md_pw.hsd', current_dir+'/DFTB+/dftb_in.hsd')
         elif vdw == "TS":
-            shutil.copyfile('DFTB+/in_files/md_ts.hsd', 'DFTB+/dftb_in.hsd')
+            shutil.copyfile(current_dir+'/DFTB+/in_files/md_ts.hsd', current_dir+'/DFTB+/dftb_in.hsd')
         else:
             print ("Dispersion type not recognized")
             sys.exit()
         try:
-            file = open("DFTB+/dftb_in.hsd", "r+")
+            file = open(current_dir+"/DFTB+/dftb_in.hsd", "r+")
         except OSError:
             print ("Could not open detailed.out file")
             sys.exit()
@@ -121,11 +126,11 @@ class Handler():
             lines.insert(idx+1,'    H = "p"\n')
             
 
-        with open('DFTB+/dftb_in.hsd', 'w') as f:
+        with open(current_dir+'/DFTB+/dftb_in.hsd', 'w') as f:
             for i in range(len(lines)):
                 f.write(lines[i])
 
-        subprocess.run("./dftbOpt.sh", shell=True)
+        subprocess.run(current_dir+"/src/dftbOpt.sh", shell=True)
 
     def RunStaticOnFrame(self,idx,vdw=None): #runs a static calculation on the frame idx of the evolution
         geom = structures.Custom(self.evolution[idx])
@@ -146,7 +151,7 @@ class Handler():
         geom.SaveDistances()
 
     def SaveEvolutionAs(self, name): #saves the MD xyz simulation with a different name
-        shutil.copyfile('DFTB+/geo_end.xyz', 'DFTB+/'+name+'.xyz')
+        shutil.copyfile(current_dir+'/DFTB+/geo_end.xyz', current_dir+'/DFTB+/'+name+'.xyz')
 
     def SaveElectronChargesOnFrame(self,idx):
         geom = structures.Custom(self.evolution[idx])
@@ -169,14 +174,14 @@ class Handler():
     def SaveLastFrame(self,name):
         print("Decomposition "+str(len(self.evolution))+"    "+name)
         geom = structures.Custom(self.evolution[len(self.evolution)-1])
-        geom.SaveGeometry(decour=name,path="out/")
+        geom.SaveGeometry(decour=name,path=current_dir+"/out/")
         self.structure_eq.SaveGeometry()
 
     def LoadEvolution(self,path=None):
         angstrom = 0.529177249
         femtosecond = 41.341374575751
         if path == None:
-            Nat, Niter, self.evolution, self.types = filetypes.Loadxyz("DFTB+/geo_end.xyz",angstrom)
+            Nat, Niter, self.evolution, self.types = filetypes.Loadxyz(current_dir+"/DFTB+/geo_end.xyz",angstrom)
         else:
             Nat, Niter, self.evolution, self.types = filetypes.Loadxyz(path,angstrom)
         self.acelerations = []
