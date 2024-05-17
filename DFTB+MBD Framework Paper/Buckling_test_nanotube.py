@@ -1,8 +1,6 @@
 import os
 import sys
-current = os.path.dirname(os.path.realpath(__file__))
-parent = os.path.dirname(current)
-sys.path.append(parent)
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../src')))
 
 import numpy as np
 import numpy.linalg as LA
@@ -71,8 +69,8 @@ def buckling_statistics(vdw=None):
         F_total = 0
         for j in Nanotube_left_boundary:
             F_total = F_total + F[j][axis]
-        with open('out/Buckling.txt', 'a') as f:
+        with open('../out/Buckling.txt', 'a') as f:
             f.write(ru+' '+str(F_total)+'\n')
 
-buckling_simulation()
+# buckling_simulation()
 buckling_statistics()

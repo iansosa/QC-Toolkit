@@ -59,9 +59,10 @@ def EbondsThree_proper(Nbonds,Nangs,Noffplane,Nproper,x,b,a,o):
 def min_delta(d,FMBD,fPW,r):
     FPW = np.array([0,0,0])
     for i in range(len(fPW)):
-        corr=(r[i]/d[1])**(d[0]+d[2]*d[1]/r[i])
         if r[i] < 1:
             corr = 1
+        else:
+            corr=(r[i]/d[1])**(d[0]+d[2]*d[1]/r[i])
         FPW = FPW + fPW[i]*corr
     ret = LA.norm(FMBD-FPW)/LA.norm(FMBD)
     if ret > 100000 or np.isnan(ret) == True:

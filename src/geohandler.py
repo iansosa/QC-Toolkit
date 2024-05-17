@@ -264,7 +264,6 @@ class Handler():
     def Distances(self,idx): #returns a list of all the interatomic distances from atom idx
         ref_point = np.array(self.pos_as_nparray[idx])
         diff = (self.pos_as_nparray - ref_point)**2
-        # print("hi",np.sqrt(np.sum(diff,axis=1))[0],np.sqrt((self.x[idx]-self.x[0])**2+(self.y[idx]-self.y[0])**2+(self.z[idx]-self.z[0])**2))
         distances = np.sqrt(np.sum(diff,axis=1))
         return np.array(distances)
 
@@ -410,7 +409,7 @@ class Handler():
 
         if extension == "gro":
             recognized = True
-            self.Nat, geometry, self.periodic, self.types, self.unit_cell = filetypes.Loadgro("../SavedStructures/"+path,nantobohr)
+            self.Nat, geometry, self.periodic, self.types, self.unit_cell = filetypes.Loadgro("SavedStructures/"+path,nantobohr)
             print(str(self.Nat)+" atoms loaded")
 
         if extension == "xyz":

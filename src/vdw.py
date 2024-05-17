@@ -151,21 +151,22 @@ class vdWclass:
             self.pos[i][2] = self.pos[i][2] + db
         return Hessian
 
-    def calculate(self, pos, what='energy', model="MBD",discrete=False,atom_types = None):
+    def calculate(self, pos, what='energy', model="MBD",discrete=False,atom_types = None, volumes = None):
 
         self.pos = pos
         if atom_types == None:
             atom_types = []
             for i in range(len(pos)):
                 atom_types.append("C")
-        volumes = []
-        for i in range(len(atom_types)):
-            if atom_types[i] == "C":
-                volumes.append(0.7904) #polymer melts
-                # volumes.append(0.87)
-            if atom_types[i] == "H":
-                volumes.append(0.6167)
-        # self.a0, self.C6, self.Rvdw = from_volumes(atom_types, 0.87)
+        if volumes == None:
+            volumes = []
+            for i in range(len(atom_types)):
+                if atom_types[i] == "C":
+                    volumes.append(0.7904) #polymer melts
+                    # volumes.append(0.87)
+                if atom_types[i] == "H":
+                    volumes.append(0.6167)
+            # self.a0, self.C6, self.Rvdw = from_volumes(atom_types, 0.87)
 
         self.a0, self.C6, self.Rvdw = from_volumes(atom_types,volumes)
         if model not in self.valid_models:

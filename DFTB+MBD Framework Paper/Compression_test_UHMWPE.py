@@ -1,3 +1,8 @@
+"""
+This code can be used for both compression and elongation tests of UHMWPE,
+one should accordingly define the 'loading' (Displace_UC([dx,dy,dz])) and constraints (RunOptimize(fixlengths='')) on the unit cell.
+"""
+
 import os
 import sys
 current = os.path.dirname(os.path.realpath(__file__))
