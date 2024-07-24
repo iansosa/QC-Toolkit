@@ -16,8 +16,8 @@ This toolkit/API provides a suite of tools for working with the Density Function
 To install the toolkit, clone the repository to your local machine using:
 
 ```bash
-git clone https://github.com/your-username/your-repository.git
-cd your-repository
+git clone https://github.com/iansosa/QC-Toolkit.git
+cd QC-Toolkit
 ```
 
 Ensure that you have the necessary dependencies installed, including DFTB+, Python, and any required Python packages.
