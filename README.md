@@ -86,11 +86,3 @@ bonds = Bonds(custom_structure)
 # Calculate and save the bond matrix
 bonds.CalcSaveBondMatrix()
 ```
-
-## Contributing
-
-Contributions to the toolkit are welcome! Please read `CONTRIBUTING.md` for details on our code of conduct, and the process for submitting pull requests to us.
-
-## License
-
-This project is licensed under the MIT License - see the `LICENSE.md` file for details.
