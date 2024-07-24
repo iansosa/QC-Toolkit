@@ -180,4 +180,3 @@ python Buckling_test_nanotube.py
 ```
 
 The script will perform the buckling simulation or statistics calculation based on the function you choose to run. The results will be saved in the `out/` directory.
-```
