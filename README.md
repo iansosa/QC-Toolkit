@@ -94,8 +94,3 @@ Contributions to the toolkit are welcome! Please read `CONTRIBUTING.md` for deta
 ## License
 
 This project is licensed under the MIT License - see the `LICENSE.md` file for details.
-
-## Acknowledgments
-
-- Thanks to the DFTB+ community for providing the simulation software.
-- Acknowledge any collaborators or institutions that supported the development of this toolkit.
