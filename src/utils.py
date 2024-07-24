@@ -9,6 +9,10 @@ from scipy.optimize import curve_fit
 from scipy.stats import norm
 from matplotlib.colors import LinearSegmentedColormap
 
+from pathlib import Path
+current_file_path = Path(__file__).resolve()
+current_dir = str(current_file_path.parent.parent)
+
 def StaticOverEvolve(temp):
     Nat=10
     R0=2.4
@@ -169,13 +173,13 @@ def CorrelationOverEvolve(temp):
 
 def _write_file(name,content):
     if isinstance(content[0], collections.abc.Sized) == True:
-        with open('out/'+name, 'w') as f:
+        with open(current_dir+'/out/'+name, 'w') as f:
             for i in range(len(content)):
                 for j in range(len(content[i])):
                     f.write(str(content[i][j])+' ')
                 f.write('\n')
     else:
-        with open('out/'+name, 'w') as f:
+        with open(current_dir+'/out/'+name, 'w') as f:
             for i in range(len(content)):
                 f.write(str(i)+' '+str(content[i])+' '+'\n')
 

@@ -189,3 +189,18 @@ class vdWclass:
 
         return outs
 
+        # Assuming you have the following NumPy arrays:
+        # alpha_0_ratios: ratios of polarizabilities (VV functional / free atom)
+        # C6_ratios: ratios of C6 coefficients (VV functional / free atom)
+        # self.a0: free-atom polarizabilities
+        # self.C6: free-atom C6 coefficients
+        # self.Rvdw: free-atom van der Waals radii
+
+        # Rescale alpha_0
+            #self.a0 = self.a0 * alpha_0_ratios
+
+        # Rescale C6
+            #self.C6 = self.C6 * C6_ratios
+
+        # Rescale R_vdw using the empirical/theoretical relationship provided
+            #self.Rvdw = 2.5 * self.a0**(1.0 / 7.0) * alpha_0_ratios**(1.0 / 3.0)
