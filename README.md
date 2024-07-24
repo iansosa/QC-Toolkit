@@ -24,51 +24,67 @@ Ensure that you have the necessary dependencies installed, including DFTB+, Pyth
 
 ## Usage
 
-The toolkit consists of several Python scripts and shell scripts located in the `src/` directory. Here is a brief overview of how to use these scripts:
+The toolkit is used by writing Python scripts that import and utilize the provided classes and functions. Below are some examples of how to use the toolkit.
 
 ### Geometry Manipulation
 
-To manipulate molecular geometries, use the `structures.py` script:
+To manipulate molecular geometries, import and use the geometry classes:
 
 ```python
-from structures import Sphere, Ring, Chain
+from src.structures import Sphere, Ring, Chain
 
 # Create a new spherical structure with 30 atoms and an interatomic distance of 2.4 Bohr
 sphere = Sphere(30, 2.4)
+sphere.SetPos(30, 2.4)  # Set positions of atoms in the sphere
 ```
 
-### Simulation Setup
+### Simulation Setup and Execution
 
-To set up a simulation, use the `dftbOpt.sh` shell script:
+Prepare and run simulations by creating a structure and using the `Handler` class to manage simulations:
 
-```bash
-./src/dftbOpt.sh
+```python
+from src.geohandler import Handler
+from src.structures import Custom
+
+# Load a custom molecular structure from a file
+custom_structure = Custom('path/to/geometry.xyz')
+
+# Initialize the handler with the custom structure
+handler = Handler(custom_structure)
+
+# Optimize the geometry
+handler.RunOptimize()
+
+# Run a static calculation
+handler.RunStatic()
 ```
-
-This script will prepare the input files and execute DFTB+ with the appropriate settings.
 
 ### Data Analysis
 
-Analyze simulation data using the `mdhandler.py` script:
+Analyze simulation data using the methods provided by the `Handler` class:
 
 ```python
-from mdhandler import Handler as MDH
+# Assuming 'handler' is already initialized with a structure
 
-# Load an MD trajectory and compute kinetic energy
-md_handler = MDH(structure_eq, optimize=False)
-md_handler.LoadEvolution('path/to/trajectory.xyz')
-kinetic_energy = md_handler.ComputeKenergy()
+# Save the optimized geometry to a file
+handler.SaveGeometry('optimized_geometry.gen')
+
+# Load and analyze the forces on the structure
+forces = handler.GetForces()
 ```
 
 ### Parametrization
 
-Adjust bond parameters using the `bondcalc.py` script:
+Adjust bond parameters using the `Bonds` class:
 
 ```python
-from bondcalc import Bonds
+from src.bondcalc import Bonds
 
-# Initialize bond calculations for a given structure
-bonds = Bonds(structure)
+# Initialize bond calculations for the custom structure
+bonds = Bonds(custom_structure)
+
+# Calculate and save the bond matrix
+bonds.CalcSaveBondMatrix()
 ```
 
 ## Contributing
