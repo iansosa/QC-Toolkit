@@ -86,3 +86,98 @@ bonds = Bonds(custom_structure)
 # Calculate and save the bond matrix
 bonds.CalcSaveBondMatrix()
 ```
+
+## Example: Buckling Test on a Carbon Nanotube
+
+This example demonstrates how to perform a buckling test on a carbon nanotube using the toolkit. The test involves compressing the nanotube and analyzing the forces experienced by the atoms at the boundaries.
+
+### Buckling Simulation
+
+The `buckling_simulation` function compresses the nanotube by a specified displacement increment and performs an optimization at each step. The geometry is saved after each optimization.
+
+```python
+from structures import FromFile
+
+def buckling_simulation(vdw=None):
+    # Select the appropriate structure file based on the van der Waals (vdW) method
+    struct_name = f"Nanotubes/buckling/{'novdw' if vdw is None else vdw}/original.gen"
+
+    # Load the nanotube structure from the file
+    Nanotube = FromFile(struct_name)
+    Nat = Nanotube.Nat
+    print(Nat)
+
+    # Define the boundary atoms of the nanotube
+    Nanotube_boundaries = [...]
+    Nanotube_left_boundary = [...]
+
+    # Save the initial geometry
+    Nanotube.SaveGeometry()
+
+    # Perform the buckling simulation
+    dcomp = 5.0 / 100.0
+    for i in range(0, 100):
+        total_comp = i * dcomp
+        ru = str(round(total_comp, 2)).ljust(4, '0')
+
+        # Optimize the structure with the current compression
+        Nanotube.RunOptimize(vdw=vdw, static=Nanotube_boundaries, read_charges=False)
+        Nanotube.LoadGeometry()
+
+        # Save the optimized geometry
+        filename = f"geom_{'novdw' if vdw is None else vdw}_{ru}"
+        Nanotube.SaveGeometry(filename, "buckling")
+
+        # Apply additional compression for the next iteration
+        for j in Nanotube_left_boundary:
+            Nanotube.Displace(j, [0, 0, dcomp])
+```
+
+### Buckling Statistics
+
+The `buckling_statistics` function calculates the total force experienced by the boundary atoms after each compression step and records the results.
+
+```python
+def buckling_statistics(vdw=None):
+    # Define the boundary atoms and the axis to analyze
+    Nanotube_left_boundary = [...]
+    axis = 2  # z-axis
+
+    # Perform the statistics calculation
+    dcomp = 5.0 / 100.0
+    for i in range(0, 100):
+        total_comp = i * dcomp
+        ru = str(round(total_comp, 2)).ljust(4, '0')
+
+        # Load the structure for the current compression step
+        filename = f"Nanotubes/buckling/{'novdw' if vdw is None else vdw}/geom_{'novdw' if vdw is None else vdw}_{ru}.gen"
+        Nanotube = FromFile(filename)
+
+        # Run a static calculation and get the forces
+        Nanotube.RunStatic(vdw=vdw, read_charges=False)
+        F = Nanotube.GetForces()
+
+        # Calculate the total force on the boundary atoms
+        F_total = sum(F[j][axis] for j in Nanotube_left_boundary)
+
+        # Record the compression and total force
+        with open('../out/Buckling.txt', 'a') as f:
+            f.write(f"{ru} {F_total}\n")
+
+# Uncomment the function you want to run
+# buckling_simulation()
+# buckling_statistics()
+```
+
+To run the buckling test, uncomment the desired function call at the bottom of the script. Ensure that the `Nanotubes/buckling/` directory contains the initial geometry files for the nanotube with the appropriate naming convention.
+
+## Running the Example
+
+To execute the buckling test example, navigate to the directory containing `Buckling_test_nanotube.py` and run the script with Python:
+
+```bash
+python Buckling_test_nanotube.py
+```
+
+The script will perform the buckling simulation or statistics calculation based on the function you choose to run. The results will be saved in the `out/` directory.
+```
