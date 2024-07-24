@@ -19,7 +19,74 @@ current_file_path = Path(__file__).resolve()
 current_dir = str(current_file_path.parent.parent)
 
 class Handler():
+    """
+    A class to handle geometric operations on molecular structures.
 
+    Attributes:
+    Nat (int): Number of atoms in the structure.
+    R0 (float): Reference interatomic distance.
+    R0s (np.ndarray): Array of interatomic distances.
+    R0neighbours (int): Number of nearest neighbors to consider for R0 approximation.
+    bonds (list): List of bonded atom pairs.
+    offplane (list): List of off-plane angles.
+    dihedral (list): List of dihedral angles.
+    angles (list): List of bond angles.
+    distances (list): List of interatomic distances.
+    periodic (bool): Indicates if the structure is periodic.
+    types (list): List of atom types.
+    unit_cell (list): List of unit cell vectors.
+
+    Methods:
+    add: Adds two structures together.
+    Fold: Folds a periodic structure into its unit cell.
+    Expand: Expands the unit cell of a periodic structure.
+    RemoveAtoms: Removes atoms from the structure.
+    SetPos: Abstract method to set the positions of atoms.
+    Pos: Returns the positions of atoms.
+    PosAsList: Returns the positions of atoms as a list.
+    PosAsListIdx: Returns the positions of atoms with given indices as a list.
+    TypesAsListIdx: Returns the types of atoms with given indices as a list.
+    ShowStruct: Displays the 3D structure.
+    ShowR0s: Displays the R0 estimations.
+    ShowWidths: Displays the errors in the R0 estimations.
+    ShowDistances: Displays the interatomic distances for a given atom.
+    SaveR0s: Saves the R0 estimations to a file.
+    Distances: Returns a list of all interatomic distances from a given atom.
+    Distance: Returns the distance between two atoms.
+    GetVersor: Returns the versor pointing from one atom to another.
+    SaveDistances: Saves all interatomic distances to a file.
+    GetR0s: Returns a list of R0 estimations and errors.
+    UpdateR0s: Updates the R0 estimations and errors.
+    SaveGeometry: Saves the geometry to a file.
+    LoadGeometry: Loads the geometry from a file.
+    RunOptimize: Runs a DFTB+ optimization.
+    RunStatic: Runs a static DFTB+ calculation.
+    RunHessian: Runs a DFTB+ Hessian calculation.
+    Displace: Displaces an atom by a given vector.
+    SetAtomPos: Sets the position of an atom.
+    Displace_UC: Elongates the unit cell.
+    Displace_UC_2: Elongates the second vector of the unit cell.
+    GetVersor: Returns a versor pointing from one atom to another.
+    PullBond: Pulls one atom away from another.
+    RotateBond: Rotates one atom towards another around a pivot atom.
+    RotateAllZ: Rotates all atoms around the Z-axis.
+    MoveBond: Moves an atom in a given direction.
+    MoveAll: Moves all atoms in a given direction.
+    Center: Centers the structure.
+    SetDisplacements: Moves all atoms using a displacement matrix.
+    GetForces: Loads the forces from a DFTB+ calculation.
+    GetVolume: Loads the CPA ratio from a DFTB+ calculation.
+    GetStress: Loads the stress tensor from a DFTB+ calculation.
+    GetHessian: Loads the Hessian matrix from a DFTB+ calculation.
+    _condenseHessian: Calculates the condensed Hessian matrix.
+    GetEnergy: Loads the total energy from a DFTB+ calculation.
+    CalcBondedNeighbours: Calculates bonded neighbours based on a cutoff distance.
+    CalcBondAngles: Calculates bond angles.
+    CalcBondOffPlane: Calculates off-plane angles.
+    CalcBondDihedral: Calculates dihedral angles.
+    CalcBondDistances: Calculates bond distances.
+    ConectedComponents: Returns all connected components in the structure.
+    """
     def __init__(self,Nat,R0,propcalc=True): #initialize the desired geometry with interatomic distance R0 (Bohr)
         self.Nat = Nat
         self.R0s = None

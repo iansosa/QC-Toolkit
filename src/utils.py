@@ -14,6 +14,12 @@ current_file_path = Path(__file__).resolve()
 current_dir = str(current_file_path.parent.parent)
 
 def StaticOverEvolve(temp):
+    """
+    Performs static calculations over an MD evolution at a given temperature.
+
+    Parameters:
+    - temp (float): Temperature at which the MD evolution is performed.
+    """
     Nat=10
     R0=2.4
     Chain1 = structures.Chain(Nat,R0)
@@ -56,6 +62,12 @@ def StaticOverEvolve(temp):
             f.write(str(i)+ " " +str(F_upper_MBD-F_upper_Short)+ " "+ str(F_lower_MBD-F_lower_Short)+ " " +str(F_upper_PW-F_upper_Short)+ " "+ str(F_lower_PW-F_lower_Short)+ " " +str(F_upper_Short)+ " "+ str(F_lower_Short)+"\n")
 
 def CorrelationOverEvolve(temp):
+    """
+    Calculates the correlation of velocities over an MD evolution at a given temperature.
+
+    Parameters:
+    - temp (float): Temperature at which the MD evolution is performed.
+    """
     Nat=10
     R0=2.4
     Chain1 = structures.Chain(Nat,R0)
@@ -172,6 +184,13 @@ def CorrelationOverEvolve(temp):
 
 
 def _write_file(name,content):
+    """
+    Writes content to a file with the given name.
+
+    Parameters:
+    - name (str): Name of the file to write to.
+    - content (list): Content to write to the file.
+    """
     if isinstance(content[0], collections.abc.Sized) == True:
         with open(current_dir+'/out/'+name, 'w') as f:
             for i in range(len(content)):
@@ -184,6 +203,15 @@ def _write_file(name,content):
                 f.write(str(i)+' '+str(content[i])+' '+'\n')
 
 def cart2sph(coord_cart):
+    """
+    Converts Cartesian coordinates to spherical coordinates.
+
+    Parameters:
+    - coord_cart (list): Cartesian coordinates to convert.
+
+    Returns:
+    - list: Spherical coordinates [r, elev, az].
+    """
     x = coord_cart[0]
     y = coord_cart[1]
     z = coord_cart[2]
@@ -194,6 +222,15 @@ def cart2sph(coord_cart):
     return [r, elev, az]
 
 def cart2sph_list(coord_cart):
+    """
+    Converts a list of Cartesian coordinates to spherical coordinates.
+
+    Parameters:
+    - coord_cart (list): List of Cartesian coordinates to convert.
+
+    Returns:
+    - list: List of spherical coordinates.
+    """
     coord_spher = []
     for i in range(len(coord_cart)):
         aux = cart2sph(coord_cart[i])
@@ -201,6 +238,15 @@ def cart2sph_list(coord_cart):
     return coord_spher
 
 def _read_file(file_path):
+    """
+    Reads data from a file at the given path.
+
+    Parameters:
+    - file_path (str): Path to the file to read.
+
+    Returns:
+    - list: Data read from the file.
+    """
     data = []
     with open(file_path, 'r') as file:
         for line in file:
@@ -210,6 +256,16 @@ def _read_file(file_path):
     return data
 
 def concatenate_data(data1, data2):
+    """
+    Concatenates two sets of data based on their indices.
+
+    Parameters:
+    - data1 (list): First set of data to concatenate.
+    - data2 (list): Second set of data to concatenate.
+
+    Returns:
+    - list: Concatenated data.
+    """
     # Create a mapping from index (as int) to data for easy lookup
     data1_dict = {int(row[0]): row[1:] for row in data1}
     data2_dict = {int(row[0]): row[1:] for row in data2}
@@ -311,6 +367,19 @@ def plot_heatmap(x_data, y_data, x_bins=10, y_bins=10, x_range=None, y_range=Non
     plt.show()
 
 def filter_samples_idx(data, idx, threshold,case="smaller"):
+
+    """
+    Filters samples based on a threshold applied to a specific index.
+
+    Parameters:
+    - data (list): Data to filter.
+    - idx (int): Index to apply the threshold.
+    - threshold (float): Threshold value.
+    - case (str): Determines if filtering is for values "smaller" or "bigger" than the threshold.
+
+    Returns:
+    - list: Filtered data.
+    """
     # Check if the idx dimension of each sample is bigger than the threshold
     data = np.array(data)
     if case == "smaller":
@@ -335,6 +404,15 @@ def filter_samples_idx(data, idx, threshold,case="smaller"):
     return filtered_data.tolist()
 
 def filter_samples_complex(data):
+    """
+    Filters samples based on complex conditions.
+
+    Parameters:
+    - data (list): Data to filter.
+
+    Returns:
+    - list: Filtered data.
+    """
     data = np.array(data)
     # Calculate the sum of the first and second dimensions for each sample
     sum_of_first_two_dims = -data[:, 6] * data[:, 5]/data[:, 4]
@@ -358,6 +436,18 @@ def filter_samples_complex(data):
 
 
 def filter_equal_arrays_condfirst(a, b, c, threshold=0.1):
+    """
+    Filters three arrays based on a condition applied to the first array.
+
+    Parameters:
+    - a (np.ndarray): First array to apply the condition.
+    - b (np.ndarray): Second array to filter.
+    - c (np.ndarray): Third array to filter.
+    - threshold (float): Threshold value for the condition.
+
+    Returns:
+    - tuple: Filtered arrays (a_filtered, b_filtered, c_filtered).
+    """
     # Create a boolean mask where True corresponds to elements of 'a' <= threshold
     mask = a > threshold
         
@@ -369,6 +459,17 @@ def filter_equal_arrays_condfirst(a, b, c, threshold=0.1):
     return a_filtered, b_filtered, c_filtered
 
 def fit_gaussian(data, initial_mean_guess,initial_std_guess):
+    """
+    Fits a Gaussian distribution to the given data.
+
+    Parameters:
+    - data (array-like): Data to fit.
+    - initial_mean_guess (float): Initial guess for the mean of the Gaussian.
+    - initial_std_guess (float): Initial guess for the standard deviation of the Gaussian.
+
+    Returns:
+    - tuple: Fitted mean and standard deviation of the Gaussian.
+    """
     # Define the Gaussian function
     def gaussian(x, mean, amplitude, standard_deviation):
         return amplitude * np.exp(-((x - mean) ** 2) / (2 * standard_deviation ** 2))

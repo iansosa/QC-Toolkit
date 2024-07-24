@@ -11,7 +11,33 @@ import vdw
 import shutil
 
 class Bonds():
+    """
+    A class to handle bond calculations within a molecular structure.
 
+    Attributes:
+    structure_eq (Structure): A deep copy of the molecular structure, possibly optimized or static.
+    BondMatrix (np.ndarray): A matrix containing bond force constants.
+    EqDistanceMatrix (np.ndarray): A matrix containing equilibrium distances between atoms.
+    EqPos (list): A list of equilibrium positions of atoms.
+    EqAngles (list): A list of equilibrium angles between bonds.
+
+    Methods:
+    SaveForces: Saves the forces acting on the bonds to a file.
+    GetK: Calculates the force constant for a bond between two atoms.
+    GetOurHessian: Calculates the Hessian matrix for the molecular structure.
+    GetForces: Calculates the forces on the structure given a displacement matrix.
+    GetKangle: Calculates the force constant for an angle between three atoms.
+    CalcSaveEnergyPerturbation: Calculates and saves the energy perturbation due to displacements.
+    FitEnergy: Fits the energy perturbation data to a model.
+    CalcSaveBondMatrix: Calculates and saves the bond matrix.
+    CalcAngleBond: Calculates the force constants for all bond angles.
+    SaveDistanceMatrix: Saves the equilibrium distance matrix to a file.
+    SaveBondMatrix: Saves the bond matrix to a file.
+    SaveBondsOverDistance: Saves the bond force constants over distance to a file.
+    CalcSaveHessianComp: Calculates and saves the Hessian matrix components.
+    CalcSaveHessianCompOur: Calculates and saves the Hessian matrix components using our method.
+    CalcSaveEnergyandStructurePerturbations: Calculates and saves energy and structure perturbations.
+    """
     def __init__(self,structure,optimize=True,first_static=True):
         self.structure_eq = copy.deepcopy(structure)
 

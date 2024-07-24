@@ -6,6 +6,7 @@ from pymbd import mbd_energy as MBDcalc_Py, from_volumes
 from tqdm import tqdm
 import random
 
+# Constants and default parameters for van der Waals (vdW) calculations
 default = {
             'code':'pymbd-f',        # implementation
             'beta':0.83,             # MBD damping factor
@@ -16,6 +17,23 @@ default = {
           }
 
 class vdWclass:
+    """
+    A class for performing van der Waals (vdW) calculations using different models and methods.
+
+    Attributes:
+    code (str): The code implementation to use for vdW calculations.
+    beta (float): The MBD damping factor.
+    Sr (float): The TS damping factor.
+    screening (str): The MBD screening mode.
+    parameters (str): The vdW parameters to use.
+    pos (list): The positions of atoms in the system.
+    a0 (np.ndarray): The static polarizabilities of atoms.
+    C6 (np.ndarray): The C6 dispersion coefficients.
+    Rvdw (np.ndarray): The van der Waals radii of atoms.
+
+    Methods:
+    calculate: Performs vdW calculations for energy, forces, and Hessian matrix.
+    """
 
     valid_args = ['code',\
                   'beta',\
@@ -27,6 +45,7 @@ class vdWclass:
     valid_models = ['MBD','TS']
 
     def _set_calc(self):
+        # Private method to set the vdW calculation method based on the specified code.
         if self.code == 'pymbd-f':
             from pymbd.fortran import MBDGeom as evaluator
         elif self.code == 'tf':
@@ -46,17 +65,18 @@ class vdWclass:
 
 
     def _combineC6(self):
-       
+        # Private method to combine C6 coefficients for atom pairs.
         r = self.a0[:,None]/self.a0[None,:]
         d = self.C6[:,None]*r + self.C6[None,:]/r
         return 2*self.C6[:,None]*self.C6[None,:]/d
 
     def _get_energy(self, calc):
+        # Private method to get the vdW energy using the specified calculation method.
         out = calc.mbd_energy(self.a0, self.C6, self.Rvdw, self.beta,force = False, variant = self.screening)
         return out
 
     def _get_forces(self, calc,discrete=False):
-
+        # Private method to get the vdW forces using the specified calculation method.
         if self.model == 'MBD':
             E, F = calc.mbd_energy(self.a0, self.C6, self.Rvdw, self.beta,force = True, variant = self.screening)
             return -F
@@ -93,6 +113,7 @@ class vdWclass:
         
 
     def _get_hessian(self,db=0.01):
+        # Private method to get the vdW Hessian matrix using the specified calculation method.
         Nat = len(self.pos)
         calc = self.calc(self.pos)
         eqForces = self._get_forces(calc)
@@ -152,7 +173,20 @@ class vdWclass:
         return Hessian
 
     def calculate(self, pos, what='energy', model="MBD",discrete=False,atom_types = None, volumes = None):
+        """
+        Performs vdW calculations for energy, forces, and Hessian matrix.
 
+        Parameters:
+        pos (list): The positions of atoms in the system.
+        what (str or list): The type of calculation to perform ('energy', 'forces', 'hessian').
+        model (str): The vdW model to use ('MBD' or 'TS').
+        discrete (bool): Whether to use discrete forces for the TS model.
+        atom_types (list): The types of atoms in the system.
+        volumes (list): The atomic volumes to use for parameterization.
+
+        Returns:
+        list or np.ndarray: The results of the vdW calculations.
+        """
         self.pos = pos
         if atom_types == None:
             atom_types = []

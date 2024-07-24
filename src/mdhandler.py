@@ -12,7 +12,31 @@ current_file_path = Path(__file__).resolve()
 current_dir = str(current_file_path.parent.parent)
 
 class Handler():
+    """
+    A class to handle molecular dynamics (MD) simulations and related operations.
 
+    Attributes:
+    structure_eq (Structure): A deep copy of the molecular structure, possibly optimized or static.
+    evolution (list): A list of structures representing the MD trajectory.
+    acelerations (list): A list of accelerations for each atom in each frame of the MD trajectory.
+    types (list): A list of atom types.
+
+    Methods:
+    RunMD: Runs a molecular dynamics simulation.
+    RunStaticOnFrame: Runs a static calculation on a specific frame of the MD trajectory.
+    GetForcesOnFrame: Retrieves the forces on atoms for a specific frame of the MD trajectory.
+    SaveEvolutionAs: Saves the MD trajectory to a file with a specified name.
+    SaveElectronChargesOnFrame: Saves the electron charges for a specific frame of the MD trajectory.
+    RetStructFromEvol: Retrieves a structure from a specific frame of the MD trajectory.
+    DecomposeTrajectory: Decomposes the MD trajectory into individual frames and saves them.
+    SaveLastFrame: Saves the last frame of the MD trajectory.
+    LoadEvolution: Loads the MD trajectory from a file.
+    ComputeKenergy: Computes the kinetic energy for each frame of the MD trajectory.
+    ComputeVenergy: Computes the potential energy for each frame of the MD trajectory using DFTB+.
+    ComputeTempDispersions: Computes the temperature and positional dispersions for each atom in the MD trajectory.
+    ComputeBondDispersions: Computes the bond length dispersions for each bond in the MD trajectory.
+    GetForcesSOE: Retrieves the forces on atoms for each frame of the MD trajectory using different force fields.
+    """
     def __init__(self,structure,optimize=True):
         self.structure_eq = copy.deepcopy(structure)
 

@@ -3,6 +3,17 @@ import numpy.linalg as LA
 import sys
 
 def Loadsdf(path,conversion):
+    """
+    Loads molecular geometry from an SDF file.
+
+    Parameters:
+    - path (str): Path to the SDF file.
+    - conversion (float): Conversion factor from the units in the file to Bohr.
+
+    Returns:
+    - Nat (int): Number of atoms.
+    - geometry (list): List of atomic positions.
+    """
     try:
         file = open(path, "r+")
     except OSError:
@@ -31,6 +42,20 @@ def Loadsdf(path,conversion):
     return Nat, geometry
 
 def Loadgro(path,conversion):
+    """
+    Loads molecular geometry from a GRO file.
+
+    Parameters:
+    - path (str): Path to the GRO file.
+    - conversion (float): Conversion factor from the units in the file to Bohr.
+
+    Returns:
+    - Nat (int): Number of atoms.
+    - geometry (list): List of atomic positions.
+    - periodic (bool): Indicates if the system is periodic.
+    - aux_types (list): List of atom types.
+    - unit_cell (list): List of unit cell vectors.
+    """
     try:
         file = open(path, "r+")
     except OSError:
@@ -66,6 +91,20 @@ def Loadgro(path,conversion):
     return Nat, geometry, periodic, aux_types, unit_cell
 
 def Loadgen(path,conversion):
+    """
+    Loads molecular geometry from a GEN file.
+
+    Parameters:
+    - path (str): Path to the GEN file.
+    - conversion (float): Conversion factor from the units in the file to Bohr.
+
+    Returns:
+    - Nat (int): Number of atoms.
+    - geometry (list): List of atomic positions.
+    - periodic (bool): Indicates if the system is periodic.
+    - aux_types (list): List of atom types.
+    - unit_cell (list): List of unit cell vectors.
+    """
     try:
         file = open(path, "r+")
     except OSError:
@@ -122,6 +161,18 @@ def Loadgen(path,conversion):
     return Nat, geometry, periodic, aux_types, unit_cell
 
 def Loadcc1(path,conversion):
+    """
+    Loads molecular geometry from a CC1 file.
+
+    Parameters:
+    - path (str): Path to the CC1 file.
+    - conversion (float): Conversion factor from the units in the file to Bohr.
+
+    Returns:
+    - Nat (int): Number of atoms.
+    - geometry (list): List of atomic positions.
+    - aux_types (list): List of atom types.
+    """
     try:
         file = open(path, "r+")
     except OSError:
@@ -150,6 +201,17 @@ def Loadcc1(path,conversion):
     return Nat, geometry, aux_types
 
 def Loadtxt(path,conversion):
+    """
+    Loads molecular geometry from a TXT file.
+
+    Parameters:
+    - path (str): Path to the TXT file.
+    - conversion (float): Conversion factor from the units in the file to Bohr.
+
+    Returns:
+    - Nat (int): Number of atoms.
+    - geometry (list): List of atomic positions.
+    """
     try:
         file = open(path, "r+")
     except OSError:
@@ -172,6 +234,17 @@ def Loadtxt(path,conversion):
     return Nat, geometry
 
 def Loadxyz_single(path,conversion):
+    """
+    Loads a single frame of molecular geometry from an XYZ file.
+
+    Parameters:
+    - path (str): Path to the XYZ file.
+    - conversion (float): Conversion factor from the units in the file to Bohr.
+
+    Returns:
+    - Nat (int): Number of atoms.
+    - geometry (list): List of atomic positions.
+    """
     try:
         file = open(path, "r+")
     except OSError:
@@ -196,6 +269,19 @@ def Loadxyz_single(path,conversion):
     return Nat, geometry
 
 def Loadxyz(path,conversion): #dftb+ specifies velocities in A/ps, velocities are returned in bohr/a.u(time)
+    """
+    Loads molecular dynamics trajectory from an XYZ file.
+
+    Parameters:
+    - path (str): Path to the XYZ file.
+    - conversion (float): Conversion factor from the units in the file to Bohr.
+
+    Returns:
+    - Nat (int): Number of atoms.
+    - Niter (int): Number of iterations (frames) in the trajectory.
+    - evolution (list): List of atomic positions for each frame.
+    - types (list): List of atom types.
+    """
     print("Loadingxyz..")
     femtosecond = 41.341374575751
     try:
@@ -228,6 +314,17 @@ def Loadxyz(path,conversion): #dftb+ specifies velocities in A/ps, velocities ar
     return Nat, Niter, evolution, types
 
 def LoadPly(path,Radius):
+    """
+    Loads molecular geometry from a PLY file.
+
+    Parameters:
+    - path (str): Path to the PLY file.
+    - Radius (float): Desired radius to scale the geometry.
+
+    Returns:
+    - Nat (int): Number of atoms.
+    - geometry (list): List of atomic positions.
+    """
     print("Loadingply...")
     try:
         file = open(path, "r+")

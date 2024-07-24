@@ -6,7 +6,14 @@ from operator import itemgetter
 import time
 
 class Sphere(Handler):
+   """
+    Represents a spherical molecular structure with equidistant atoms.
 
+    Inherits from Handler and uses its methods to manipulate the structure.
+
+    Methods:
+    SetPos: Overrides the Handler method to set the positions of atoms in a spherical arrangement.
+    """
     def __init__(self, Nat,R0):
         super().__init__(Nat,R0)
 
@@ -31,6 +38,14 @@ class Sphere(Handler):
         self.widths = self.widths/norm
 
 class Ring(Handler):
+    """
+    Represents a ring molecular structure with equidistant atoms.
+
+    Inherits from Handler and uses its methods to manipulate the structure.
+
+    Methods:
+    SetPos: Overrides the Handler method to set the positions of atoms in a ring arrangement.
+    """
 
     def __init__(self, Nat,R0):
         super().__init__(Nat,R0)
@@ -63,7 +78,14 @@ class Ring(Handler):
         return R0, width
 
 class Custom(Handler): #creates a custom carbon structure given the atomic positions pos
+    """
+    Represents a custom molecular structure defined by the user.
 
+    Inherits from Handler and uses its methods to manipulate the structure.
+
+    Methods:
+    SetPos: Overrides the Handler method to set the positions of atoms as specified by the user.
+    """
     def __init__(self,pos,propcalc=False,types=None):
         self.Nat = len(pos)
         R0=2.4
@@ -88,7 +110,14 @@ class Custom(Handler): #creates a custom carbon structure given the atomic posit
         self.R0 = R0
 
 class FromFile(Handler): #loads a structure from file
+    """
+    Represents a molecular structure loaded from a file.
 
+    Inherits from Handler and uses its methods to manipulate the structure.
+
+    Methods:
+    SetPos: Overrides the Handler method to set the positions of atoms based on the file contents.
+    """
     def __init__(self,path,propcalc=False):
         self.Nat = 30
         R0=2.4
@@ -119,7 +148,14 @@ class FromFile(Handler): #loads a structure from file
         self.R0 = R0
 
 class Chain(Handler):
+    """
+    Represents a linear chain molecular structure with equidistant atoms.
 
+    Inherits from Handler and uses its methods to manipulate the structure.
+
+    Methods:
+    SetPos: Overrides the Handler method to set the positions of atoms in a linear chain arrangement.
+    """
     def __init__(self, Nat,R0):
         super().__init__(Nat,R0)
         self.types = []
@@ -156,7 +192,14 @@ class Chain(Handler):
         return R0, width
 
 class ChainCapped(Handler):
+    """
+    Represents a linear chain molecular structure with equidistant atoms, capped with hydrogen atoms.
 
+    Inherits from Handler and uses its methods to manipulate the structure.
+
+    Methods:
+    SetPos: Overrides the Handler method to set the positions of atoms in a linear chain arrangement with hydrogen caps.
+    """
     def __init__(self, Nat,R0):
         super().__init__(Nat,R0)
         self.types = []
