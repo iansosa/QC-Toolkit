@@ -1,15 +1,17 @@
 # Examples for the DFTB+MBD Framework Paper
 
-This folder was buit to support the following paper
+This folder was buit to support the following paper published in IJES:
 ```
-@misc{DFTB+MBD,
-      title={Quantum-informed simulations for mechanics of materials: DFTB+MBD framework}, 
-      author={Zhaoxiang Shen and Raúl I. Sosa and Stéphane P. A. Bordas and Alexandre Tkatchenko and Jakub Lengiewicz},
-      year={2024},
-      eprint={2404.04216},
-      archivePrefix={arXiv},
-      primaryClass={cs.CE}
-}
+@article{DFTB+MBD,
+title = {Quantum-informed simulations for mechanics of materials: DFTB+MBD framework},
+journal = {International Journal of Engineering Science},
+author={Zhaoxiang Shen and Raúl I. Sosa and Stéphane P. A. Bordas and Alexandre Tkatchenko and Jakub Lengiewicz},
+volume = {204},
+pages = {104126},
+year = {2024},
+issn = {0020-7225},
+doi = {https://doi.org/10.1016/j.ijengsci.2024.104126}}
+
 ```
 The folder includes examples of three different molecular systems, namely carbon chains, carbon nanotubes, and Ultra High Molecular Weight Polyethylene (UHMWPE), which correponds to Section 4 in the paper.
 
